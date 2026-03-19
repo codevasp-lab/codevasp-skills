@@ -44,10 +44,10 @@ graph LR
 
 | API                                                                                                                                           | Request | Response |
 | --------------------------------------------------------------------------------------------------------------------------------------------- | ------- | -------- |
-| VASP List Search<br>Public Key Search<br>Networks by Coin<br>Search VASP by Wallet Request<br>Search VASP by Wallet Result                    | X       | X        |
+| VASP List Search<br />Public Key Search<br />Networks by Coin<br />Search VASP by Wallet Request<br />Search VASP by Wallet Result                    | X       | X        |
 | Virtual Asset Address Search                                                                                                                  | O       | X        |
 | Asset Transfer Authorization                                                                                                                  | O       | O        |
-| Report Transfer Result (TX Hash)<br>Transaction Status Search<br>Finish Transfer<br>Search VASP by TXID Request<br>Search VASP by TXID Result | X       | X        |
+| Report Transfer Result (TX Hash)<br />Transaction Status Search<br />Finish Transfer<br />Search VASP by TXID Request<br />Search VASP by TXID Result | X       | X        |
 | Asset Transfer Data Request)                                                                                                                  | O       | O        |
 ## 5. Algorithm library
 

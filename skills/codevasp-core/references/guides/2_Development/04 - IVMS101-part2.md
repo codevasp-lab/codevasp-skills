@@ -187,7 +187,7 @@ When beneficiary VASP response to originator, it should complete the IVMS101 for
 | nationalIdentifier | Required | String | A unique identification number for an individual or corporation.|
 | nationalIdentifierType | Required| NationalIdentifierTypeCode | An object representing the type of identification number. |
 | countryOfIssue | Optional | CountryCode | The country where the identification number was issued. (only used with 'naturalPerson') |
-| registrationAuthority | Optional | RegistrationAuthority | - An object containing information about the institution that issued the identification number. <br> -Used only when the value of 'nationalIdentifierType' is not 'LEIX'. |
+| registrationAuthority | Optional | RegistrationAuthority | - An object containing information about the institution that issued the identification number. <br /> -Used only when the value of 'nationalIdentifierType' is not 'LEIX'. |
 
 ### 2-1-12. NationalIdentifierTypeCode
 - A code used to distinguish the types of an individual's national identification number.
