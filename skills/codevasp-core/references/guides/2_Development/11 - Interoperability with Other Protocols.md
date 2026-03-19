@@ -1,8 +1,20 @@
 # 11 - Interoperability with Other Protocols
 
 ## 1. Check the VASP List
-![](Dev 11 - Interoperability with Other Protocols - 01.png)
-  
+Here is the extracted text from the fifth image, which shows the VASP integration list. Please note that several fields in the table (Service Name and Entity ID) are blurred in the original image.
+
+### On Dashboard
+* **Main Tabs:** **Info** 
+* **Dropdown Menu:**
+  * **List of Available VASPs** (Select)
+  * Company Info
+ 
+### **List of Available VASPs**
+> **Information Note:**
+> * Dashboar will display the list of VASPs that you can integrate via CodeVASP, actual integration status may vary depending on your internal policy.
+> * The 'Server Status' represents the VASP’s server condition, not integration status. May differ from real-time information.
+> * Exchanges integrated with the VerifyVASP solution support only domestic transactions within South Korea, transactions with exchanges outside Korea are not possible.
+ 
 By checking the response of the 'VASP List Search' API or the 'Info - List of Available VASPs' page on the dashboard, you can view the list of VASPs and their respective `allianceName` (travel rule solution). Currently, CodeVASP is integrated with solutions such as Verify VASP, GTR, and Sygna, providing a wide-ranging network.
 
 ## 2. Integration process with VASPs from other protocols 
