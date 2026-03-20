@@ -1,4 +1,4 @@
-# 02 - Encryption & Decryption
+# 02 - Encryption Decryption
 
 ## 1. Encryption Approach
 - When communicating between VASPs, user personal information must always be end-to-end encrypted.
