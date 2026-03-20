@@ -21,15 +21,15 @@ This skill provides the AI agent with the necessary procedures, references, and 
 Before responding to user queries, consult the appropriate resources in the `references/` directory. Be explicit in your responses about which file or standard you are referencing.
 
 ### 1. Guides (`references/guides/`)
-- **2_Development/**
-  - `01 - Dev Environment Setup.md`: Dashboard onboarding, dev server registration (key pair generation), and IP whitelisting procedures.
-  - `02 - Header Parameter.md`: Detailed specification of mandatory HTTP headers (`X-Code-Req-Nonce`, `X-Code-Req-PubKey`, `X-Code-Req-Signature`, `X-Code-Req-Datetime`, `X-Request-Origin`).
+- **Development/**
+  - `01-Dev-Environment-Setup.md`: Dashboard onboarding, dev server registration (key pair generation), and IP whitelisting procedures.
+  - `03-Header-Parameter.md`: Detailed specification of mandatory HTTP headers (`X-Code-Req-Nonce`, `X-Code-Req-PubKey`, `X-Code-Req-Signature`, `X-Code-Req-Datetime`, `X-Request-Origin`).
 
 ### 2. API Reference (`references/api/`)
 
-- **API 05 - More Services/**
-  - `1. Uppsala Wallet Screening.md`: API for screening a wallet address for risk. Returns `securityCategory` and `securityTags`.
-  - `2. Uppsala TXID Screening.md`: API for screening a blockchain transaction ID for risk. Returns sender/receiver wallet risk info with `securityCategory`, `securityTags`, and `detailedDescription`.
+- **Uppsala-Screening/**
+  - `1-Uppsala-Wallet-Screening.md`: API for screening a wallet address for risk. Returns `securityCategory` and `securityTags`.
+  - `2-Uppsala-TXID-Screening.md`: API for screening a blockchain transaction ID for risk. Returns sender/receiver wallet risk info with `securityCategory`, `securityTags`, and `detailedDescription`.
 
 ---
 
@@ -38,7 +38,7 @@ Before responding to user queries, consult the appropriate resources in the `ref
 When the user requests assistance with CodeVASP Uppsala Screening integrations, adhere rigorously to the following workflows:
 
 ### Workflow 1: Answering FAQ & Conceptual Questions
-1. Always start by scanning `references/api/Uppsala_Screening/1. Uppsala Wallet Screening.md` and `2. Uppsala TXID Screening.md`, as well as the guides in `references/guides/Development/`, to find authoritative answers.
+1. Always start by scanning `references/api/Uppsala-Screening/1-Uppsala-Wallet-Screening.md` and `2-Uppsala-TXID-Screening.md`, as well as the guides in `references/guides/Development/`, to find authoritative answers.
 2. If the user asks about risk levels, explain the four security categories: `BLACK` (highly suspicious), `GRAY` (suspicious), `WHITE` (normal), `UNKNOWN` (unknown).
 3. If the user asks about supported chains, refer to the chain list: BTC, ETH, SOL, LTC, TRX, EOS, XLM, ADA, BNB, BCH, XRP, BSC, KLAY, DASH, DOGE, ZEC, FTM, MATIC, AVAX.
 4. If the user asks about environment availability, clarify that Uppsala Screening APIs are **production only** — no dev environment is supported.
@@ -49,25 +49,25 @@ When the user requests assistance with CodeVASP Uppsala Screening integrations, 
 If a developer asks how to implement wallet or TXID screening:
 This skill supports VASP developers working on existing projects. The AI agent must maintain consistency with the existing codebase. Guide the developer through the following steps:
 
-1. **Prerequisites & Setup** (Ref: `01 - Dev Environment Setup.md`, `02 - Header Parameter.md`):
-   - Follow the dashboard onboarding and dev server registration steps in `01 - Dev Environment Setup.md` (account creation, server URL registration, key pair generation).
-   - Configure mandatory headers per `02 - Header Parameter.md`: `X-Code-Req-PubKey`, `X-Code-Req-Signature`, `X-Code-Req-Datetime`, `X-Code-Req-Nonce`, `X-Request-Origin`.
+1. **Prerequisites & Setup** (Ref: `01-Dev-Environment-Setup.md`, `03-Header-Parameter.md`):
+   - Follow the dashboard onboarding and dev server registration steps in `01-Dev-Environment-Setup.md` (account creation, server URL registration, key pair generation).
+   - Configure mandatory headers per `03-Header-Parameter.md`: `X-Code-Req-PubKey`, `X-Code-Req-Signature`, `X-Code-Req-Datetime`, `X-Code-Req-Nonce`, `X-Request-Origin`.
    - Use the **production** host URL only: `https://trapi.codevasp.com`.
-   - Whitelist IP addresses (both directions) as described in `Dev 01 - Dev Environment Setup.md`.
+   - Whitelist IP addresses (both directions) as described in `01-Dev-Environment-Setup.md`.
 
-2. **Wallet Screening** (Ref: `1. Uppsala Wallet Screening.md`):
+2. **Wallet Screening** (Ref: `1.-Uppsala-Wallet-Screening.md`):
    - Call `POST /v1/code/uppsala/wallet` with body parameters: `walletAddress` (string, required) and `chain` (string, required — e.g., `"ETH"`).
    - Parse the response: check `result` (`NORMAL` or `ERROR`), read `securityCategory` for risk level, and inspect `securityTags` array for specific threat labels (e.g., "Gambling", "Malware", "Darknet").
 
-3. **TXID Screening** (Ref: `2. Uppsala TXID Screening.md`):
+3. **TXID Screening** (Ref: `2.-Uppsala-TXID-Screening.md`):
    - Call `POST /v1/code/uppsala/tx-hash` with body parameters: `txid` (string, required) and `chain` (string, required — e.g., `"ETH"`).
    - Parse the response: check `result`, then iterate over `senderWallets` and `receiverWallets` arrays. Each wallet object contains `walletAddress`, `securityCategory`, `securityTags`, and `detailedDescription`.
 
 ### Workflow 3: Request Payload Validation
 If the user provides a request payload to validate for either screening API:
 1. **Field Check**: Verify all required fields are present:
-   - Wallet Screening: `walletAddress`, `chain` (per `1. Uppsala Wallet Screening.md`).
-   - TXID Screening: `txid`, `chain` (per `2. Uppsala TXID Screening.md`).
+   - Wallet Screening: `walletAddress`, `chain` (per `1.-Uppsala-Wallet-Screening.md`).
+   - TXID Screening: `txid`, `chain` (per `2.-Uppsala-TXID-Screening.md`).
 2. **Chain Check**: Confirm the `chain` value matches one of the supported chains: BTC, ETH, SOL, LTC, TRX, EOS, XLM, ADA, BNB, BCH, XRP, BSC, KLAY, DASH, DOGE, ZEC, FTM, MATIC, AVAX.
 3. **Provide Feedback**: Identify errors with line-item precision, including missing required fields or unsupported chain values.
 
