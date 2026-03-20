@@ -35,7 +35,7 @@ Create a webhook endpoint on your server to receive data. Once deployed, ensure 
 ### Supported Networks
 Below is the list of networks available for Unhosted Wallet Verification. Please map the value from the `network` field to the `blockchain` field when requesting a token. If you require a network that is not listed, please contact us.
 
-```Text network
+```json
 [
   {
     "network": "ETH",
