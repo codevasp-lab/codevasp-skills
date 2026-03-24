@@ -108,7 +108,7 @@ In cases where a transfer with TXID lacks Travel Rule data, preventing the benef
 
 ***
 
-**tradeCurrency**: This is a legal tender code, which follows the ISO 4217 standard used when converting to a legal tender. The following currencies can be entered: 'KRW', 'USD', 'EUR', 'JPY', 'CNY', 'GBP', 'CAD', 'AUD', 'HKD', 'SGD'. If you need to use any other currency code, please inform the CodeVASP team! For more details, please refer to the <Anchor label="Developer FAQ" target="_blank" href="https://alliances.codevasp.com/board/322">Developer FAQ</Anchor> page.
+**tradeCurrency**: This is a legal tender code, which follows the ISO 4217 standard used when converting to a legal tender. The following currencies can be entered: 'KRW', 'USD', 'EUR', 'JPY', 'CNY', 'GBP', 'CAD', 'AUD', 'HKD', 'SGD'. If you need to use any other currency code, please inform the CodeVASP team! For more details, please refer to the FAQ page.
 
 ***
 
@@ -116,7 +116,7 @@ In cases where a transfer with TXID lacks Travel Rule data, preventing the benef
 
 ***
 
-**payload**: This is an object to contain IVMS101 message. Please refer to <Anchor label="IVMS101 Response" target="_blank" href="https://github.com/codevasp-lab/IVMS101/?tab=readme-ov-file#asset-transfer-data-request-ivms101-response">IVMS101 Response</Anchor>.
+**payload**: This is an object to contain IVMS101 message. Please refer to [04-IVMS] page.
 
 > 📘 'tradePrice' calculation
 >
