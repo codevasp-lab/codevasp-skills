@@ -63,7 +63,7 @@ A VASP who wants to transfer an asset requests the beneficiary VASP for asset tr
 
 ***
 
-**tradeCurrency**: This is a legal tender code, which follows the ISO 4217 standard used when converting to a legal tender. The following currencies can be entered: 'KRW', 'USD', 'EUR', 'JPY', 'CNY', 'GBP', 'CAD', 'AUD', 'HKD', 'SGD'. If you need to use any other currency code, please inform the CodeVASP team! For more details, please refer to the <Anchor label="Developer FAQ" target="_blank" href="https://alliances.codevasp.com/board/322">Developer FAQ</Anchor> page.
+**tradeCurrency**: This is a legal tender code, which follows the ISO 4217 standard used when converting to a legal tender. The following currencies can be entered: 'KRW', 'USD', 'EUR', 'JPY', 'CNY', 'GBP', 'CAD', 'AUD', 'HKD', 'SGD'. If you need to use any other currency code, please inform the CodeVASP team! For more details, please refer to the FAQ page.
 
 ***
 
@@ -77,19 +77,19 @@ If the field value is true and the `Beneficiary` name is missing or different in
 
 ***
 
-**payload**: This is an object to contain IVMS101 message. Please refer to <Anchor label="IVMS101" target="_blank" href="https://alliances.codevasp.com/board/315">IVMS101</Anchor> page, Type section.
+**payload**: This is an object to contain IVMS101 message. Please refer to [IVMS101] page, Type section.
 
 ***
 
-**address**: Wallet address of the beneficiary. Since some VASPs integrated with other solutions may required this field, please refer to <Anchor label="Interoperability with Other Protocols" target="_blank" href="https://alliances.codevasp.com/board/320">Interoperability with Other Protocols</Anchor> page.
+**address**: Wallet address of the beneficiary. Since some VASPs integrated with other solutions may required this field, please refer to [Interoperability with Other Protocols] page.
 
 ***
 
-**tag**: Include this if a Tag or Memo exists (e.g., XRP). Since some VASPs integrated with other solutions may required this field, please refer to <Anchor label="Interoperability with Other Protocols" target="_blank" href="https://alliances.codevasp.com/board/320">Interoperability with Other Protocols</Anchor> page.
+**tag**: Include this if a Tag or Memo exists (e.g., XRP). Since some VASPs integrated with other solutions may required this field, please refer to [Interoperability with Other Protocols] page.
 
 ***
 
-**network**: This is included to distinguish when a single coin exists on multiple networks. Since some VASPs integrated with other solutions may required this field, please refer to <Anchor label="Interoperability with Other Protocols" target="_blank" href="https://alliances.codevasp.com/board/320">Interoperability with Other Protocols</Anchor> page.
+**network**: This is included to distinguish when a single coin exists on multiple networks. Since some VASPs integrated with other solutions may required this field, please refer to [Interoperability with Other Protocols] page.
 
 
 ## Response

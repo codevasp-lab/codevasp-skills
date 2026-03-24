@@ -36,7 +36,7 @@ This API is not an API to look up the asset transfer details of the counterpart 
 
 ***
 
-**status**: This refers to the status of the 'transferId', please refer to the <Anchor label="Asset Transfer Status Management" target="_blank" href="https://alliances.codevasp.com/board/318">Asset Transfer Status Management</Anchor> page for further explanation.
+**status**: This refers to the status of the 'transferId', please refer to the [Asset Transfer Status Management] page for further explanation.
 
 -`pending`: This is a status in which, for some reason, a blockchain transaction has not yet been sent and is waiting.
 

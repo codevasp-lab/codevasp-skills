@@ -10,7 +10,7 @@ Through this API, all VASPs shall be able to respond to the address search API o
 ## API action specification
 
 1. Search if the address within VASP is correct bases on `currency` and `accountNumber`.
-    1. **\[Important!] Refer<Anchor label="Verifying Wallet Address" target="_blank" href="https://alliances.codevasp.com/board/316">Verifying Wallet Address</Anchor> for how to verify address.**
+    1. **\[Important!] Refer [Verifying Wallet Address] for how to verify address.**
 2. If the addressee’s name was transmitted, it is compared with the name on the asset transfer permission request. (This is for designated exchange inquiry only.)
 3. Perform sanction screening of the `accountNumber` and the person of the beneficiary VASP and reflect the result in the response to reply.
 4. All of these processes shall be implemented not to exceed 1 second.
