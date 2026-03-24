@@ -1,7 +1,6 @@
 # 12-Interoperability-with-Other-Protocols
 
 ## 1. Check the VASP List
-Here is the extracted text from the fifth image, which shows the VASP integration list. Please note that several fields in the table (Service Name and Entity ID) are blurred in the original image.
 
 ### On Dashboard
 * **Main Tabs:** **Info** 
