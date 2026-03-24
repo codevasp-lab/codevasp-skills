@@ -1,11 +1,7 @@
 # 08-Asset-Transfer-Data-Request
 
 In cases where a transfer with TXID lacks Travel Rule data, preventing the beneficiary VASP from processing the deposit, the beneficiary VASP will call 'Asset Transfer Data Request' API to get the Travel Rule data. Implement the API to handle this request.
-
-> **When the originator's KYC information is not available**
->
-> If the originator has not completed KYC and identity information is not available, set the 'reasonType' to 'LACK_OF_INFORMATION' and provide a detailed reason in 'reasonMsg' in the response to the 'asset transfer data request'. (e.g., 'The user did not finish KYC.')
-
+ 
 ## Endpoint
 
 `PUT` `/v1/verification/tx`
@@ -19,6 +15,10 @@ In cases where a transfer with TXID lacks Travel Rule data, preventing the benef
 5. Just as the 'Asset Transfer Authorization', fill in the `Originator` and `OriginatingVASP` field of the payload base on the originating user information.
 6. Store the asset transfer details in the database and assign a status value. It can be designated as either normal or error.
 7. Generate a response message based on the results of verifying the contents of the request message. At this point, create the `Originator` and `OriginatingVASP`objects using the KYC information of the originating user, similar to sending an 'Asset Transfer Authorization' request, copy the `Beneficiary`, `BeneficiaryVASP` object directly from the request.
+
+> 📘 **When the originator's KYC information is not available**
+>
+> If the originator has not completed KYC and identity information is not available, set the 'reasonType' to 'LACK_OF_INFORMATION' and provide a detailed reason in 'reasonMsg' in the response to the 'asset transfer data request'. (e.g., 'The user did not finish KYC.')
 
 ## Request Parameters
 
