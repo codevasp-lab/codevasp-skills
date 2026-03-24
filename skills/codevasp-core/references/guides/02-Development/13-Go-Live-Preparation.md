@@ -4,7 +4,7 @@
 ### 1-1. Have you implemented Travel Rule for API-based withdrawals?
 
 If you support withdrawals through APIs, Travel Rule compliance must be enforced
-as well. This is usually managed by whitelisted(pre-registering) addresses. For more details, please refer to the guide linked below.
+as well. Check FAQ for more details.
 
 ### 1-2. Have you implemented VASP list management?
 VASPs are advised to maintain a separate list of VASPs allowed for deposits and
