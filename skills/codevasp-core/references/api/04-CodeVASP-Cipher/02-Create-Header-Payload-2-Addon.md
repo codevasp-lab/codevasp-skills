@@ -113,52 +113,6 @@ For Addon service API requests, the data to be entered in the Header and Body is
 }
 ```
 
-## Virtual Asset Address Search
-
-### Request
-
-| Name | Required | Type | Description |
-| :--- | :------- | :--- | :---------- |
-| allianceName | Required | string | Default: `CODE` |
-| apiType | Required | string | `SEARCH_ADDRESS` |
-| remotePublicKey | Required | string | beneficiary VASP's Public Key |
-| request | Required | object | Request Body |
-
-```json
-{
-    "allianceName": "CODE",
-    "remotePublicKey": "8DJomhrvr0zD11+m3nwG3ZeO9OsSY8uLHdA7WgoaX0g=",
-    "apiType": "SEARCH_ADDRESS",
-    "request": {
-        "currency": "USDT",
-        "beneficiaryWalletAddress": "0x1234567890123456789012345678901234567890", 
-        "address": "0x1234567890123456789012345678901234567890",
-        "network": "ETH",
-        "tag": "tag if needed"
-    }
-}
-```
-
-### Response
-
-| Name | Required | Type | Description |
-| :--- | :------- | :--- | :---------- |
-| signature | Required | string | Generated Signature |
-| nonce | Required | number | Generated Nonce |
-| dateTime | Required | string | Current datetime for request |
-| publicKey | Required | string | Your Public Key |
-| body | Required | string | Generated payload |
-
-```json
-{
-  "signature": "iDONJT6ck7bZD2++nGrknOR+o+aultZpwvWGRzabOePQvylN93A/9Zs6g+9mD7cnSMkE7NpuAKtKHNZvWP0RDA==",
-  "nonce": 1048167312,
-  "dateTime": "2023-06-21T05:25:16Z",
-  "publicKey": "LOpv3Vd7PKLrlDmk/MFi6mc2rPWhi3G0H3D74dayxSo=",
-  "body": "{\"currency\":\"XRP\",\"payload\":\"7UGcPV9aZ+NGZNdeV31eXyuEpQKHPA0kjaFvcUt9f8BIXG7IrkqiG2sXBqF9KZC5CZBAZ4xqnlHl2+ZSjqNSw9lm08y55NQTkIPNMHjdpsWCOItg4j5G+HDy2k8pZxmRZP7nVI6OkquJ7oB0jz31GL5uIPZd76NaBzOVy9dXe/Kp/lvTqGQj+TdD+v9C7Ez0fkOY+VPvQkzzBRlb\"}"
-}
-```
-
 ## Search VASP by TXID Request
 
 ### Request
