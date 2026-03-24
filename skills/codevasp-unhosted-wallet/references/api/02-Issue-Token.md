@@ -13,14 +13,14 @@ The `walletVerificationId` is a unique identifier for the verification session t
 ## Request Parameters
 
 ### Body Parameters
-| Name | Type | Required | Description |
-| :--- | :--- | :------- | :---------- |
-| blockchain | string | Required | Blockchain network (e.g., `ETH`). |
-| asset | string | Required | Token ticker (e.g., `ETH`). |
-| address | string | Required | User's wallet address. |
-| customerIdentification | string | Required | User identification number. |
-| widgetRenderingOrigin | string | Required | The origin where the widget is hosted (protocol + domain + port). |
-| callbackUrl | string | Optional | Callback URL for verification results. |
+| Name | Type | Required | Description                                                                                      |
+| :--- | :--- | :------- |:-------------------------------------------------------------------------------------------------|
+| blockchain | string | Required | Blockchain network (e.g., `ETH`).                                                                |
+| asset | string | Required | Token ticker (e.g., `ETH`).                                                                      |
+| address | string | Required | User's wallet address.                                                                           |
+| customerIdentification | string | Required | User identification number.                                                                      |
+| widgetRenderingOrigin | string | Required | The origin where the widget is hosted (protocol + domain + port). e.g https://your.app.domain:80 |
+| callbackUrl | string | Optional | Callback URL for verification results. e.g https://your.domain/{endpoint}                       |
 
 ## Response
 
@@ -51,8 +51,7 @@ curl --request POST \
   "customerIdentification": "codevasp-user-1",
   "widgetRenderingOrigin": "https://widget.codevasp.com",
   "callbackUrl": "https://widget.codevasp.com/callback"
-}
-'
+}'
 ```
 
 ### Response

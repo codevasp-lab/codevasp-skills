@@ -28,14 +28,14 @@ This API searches for TXID originators only among CodeVASP members. A `NOT_FOUND
 | content-type | string | Required | `application/json` |
 
 ### Body Parameters
-| Name | Type | Required | Description |
-| :--- | :--- | :------- | :---------- |
-| txid | string | Required | Transaction ID (TXID). |
-| beneficiaryAddress | string | Required | Beneficiary's wallet address (with tag/memo if applicable). |
-| requestId | string | Required | Unique request ID for querying the result. |
-| currency | string | Optional | Currency symbol (required for GTR search). |
-| network | string | Optional | Network name (required for GTR search). Use `all` to search all. |
-| callbackUrl | string | Optional | Callback URL in `https://` format. |
+| Name | Type | Required | Description                                                                                                                   |
+| :--- | :--- | :------- |:------------------------------------------------------------------------------------------------------------------------------|
+| txid | string | Required | Transaction ID (TXID).                                                                                                        |
+| beneficiaryAddress | string | Required | Beneficiary's wallet address (with tag/memo if applicable).                                                                   |
+| requestId | string | Required | Unique request ID for querying the result.                                                                                    |
+| currency | string | Optional | Currency symbol (required for GTR search).                                                                                    |
+| network | string | Optional | Network name (required for GTR search). Use `all` to search all. Please refer [12-Interoperability page with other protocols] |
+| callbackUrl | string | Optional | Callback URL in `https://` format.                                                                                            |
 
 ## Response
 
@@ -66,8 +66,7 @@ curl --request POST \
   "currency": "xrp",
   "network": "xrp",
   "callbackUrl": "https://endpoint.com"
-}
-'
+}'
 ```
 
 ### Response

@@ -44,8 +44,7 @@ curl --request POST \
   "allianceName": "CODE",
   "data": "{\\\"hi\\\": \\\"hello\\\"}",
   "remotePublicKey": "8DJomhrvr0zD11+m3nwG3ZeO9OsSY8uLHdA7WgoaX0g="
-}
-'
+}'
 ```
 
 ### Response

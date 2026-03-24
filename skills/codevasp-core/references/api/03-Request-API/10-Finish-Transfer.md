@@ -40,6 +40,31 @@ VASPs calling this API must be able to determine whether the response from the t
 | status | string | Required | Status of the transfer (e.g., `canceled`). |
 | reasonType | string | Optional | Reason code if status is canceled. |
 
+**transferId**: This is UUID assigned to the an asset transfer authorization request. It notifies the result of asset reflection for the corresponding transaction.
+
+***
+
+**status**: It indicates the status of whether the virtual asset has been reflected in the user account or not.
+
+-`canceled`: This is a status where a blockchain transaction has not been sent or canceled after being sent. (If canceled permanently)
+
+***
+
+**reasonType**: This code indicates the reason if status is canceled. (reasonType is the same as address search and asset transfer request API. Please select and use only the items you need.)
+
+-`NOT_FOUND_ADDRESS`: This is a case where a virtual asset address cannot be found.
+
+-`NOT_SUPPORTED_SYMBOL`: This is a currency symbol which cannot be traded.
+
+-`NOT_KYC_USER`: This is a case where the owner did not process KYC verification.
+
+-`SANCTION_LIST`: Virtual asset addresses or owners are subject to the sanction of the beneficiary VASP.
+
+-`LACK_OF_INFORMATION`: This is a case where there is no the information necessary to make an asset transfer decision.
+
+-`UNKNOWN`: This refers to other reasons.
+
+
 ## Response
 
 ### Fields
@@ -48,6 +73,26 @@ VASPs calling this API must be able to determine whether the response from the t
 | transferId | string | The transfer ID. |
 | result | string | Result code (`normal`, `error`). |
 | reasonType | string | Reason code if error. |
+
+**transferId**: This is an ID to distinguish asset transfer transactions in all APIs (CodeVASP is created in the verification result.)
+
+***
+
+**result**: This is the result of receiving originating information.
+
+-`normal`: The request was processed correctly, the transaction status is marked as closed.
+
+-`error`: If status change is not possible
+
+***
+
+**reasonType**: If the result value is error, a value which identifies the detailed reason.
+
+-`UNKNOWN_TRANSFER_ID`: If the Transfer ID cannot be found
+
+-`ILLEGAL_STATEFLOW`: This is a state flow which is not allowed. This is a case where change is not allowed from the current state to the update state.
+
+-`UNKNOWN`: This the case that does not belong to the above categories. Other integrated travel rule solutions may not return reasonType, and it returns this error.
 
 ## Examples
 
@@ -67,8 +112,7 @@ curl --request PUT \
   "transferId": "b09c8d00-8da9-11ec-b909-0242ac120002",
   "status": "canceled",
   "reasonType": "SANCTION_LIST"
-}
-'
+}'
 ```
 
 ### Response

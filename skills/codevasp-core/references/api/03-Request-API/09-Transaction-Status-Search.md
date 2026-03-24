@@ -36,6 +36,8 @@ This API is not an API to look up the asset transfer details of the counterpart 
 | :--- | :--- | :------- | :---------- |
 | transferId | string | Required | UUID assigned to the asset transfer authorization request. |
 
+**transferId**: This is UUID assigned to the an asset transfer authorization request. It updates the asset transfer result to the corresponding transaction.
+
 ## Response
 
 ### Fields
@@ -45,6 +47,30 @@ This API is not an API to look up the asset transfer details of the counterpart 
 | status | string | Status of the transfer (`pending`, `processing`, `wait-confirm`, `confirmed`, `canceled`). |
 | txid | string | Transaction ID (Required when status is `confirmed`). |
 | vout | string | Output index (Optional). |
+
+**transferId**: This is an ID to distinguish asset transfer transactions in all APIs.
+
+***
+
+**status**: This refers to the status of the 'transferId' managed by the counterparty VASP, please refer to the [09-Asset Transfer Status Management] page for further explanation.
+
+-`pending`: This is a status in which, for some reason, a blockchain transaction has not yet been sent and is waiting.
+
+-`processing`: A transaction was sent to the blockchain, but it is waiting for mining.
+
+-`wait-confirm`: It has been checked that the blockchain transactions had been mined, but finality has not yet been obtained.
+
+-`confirmed`: The blockchain transactions have been mined and finality has been obtained.
+
+-`canceled`: This is a status where a blockchain transaction has not been sent or canceled after being sent. (If canceled permanently)
+
+***
+
+**txid**: This is a transaction ID generated for virtual asset transfer. This is the information generated on each blockchain. Required when status is confirmed.
+
+***
+
+**vout**: For the utxo type coin, multiple txids can be created so that vout is required to distinguish unique txids.
 
 ## Examples
 
@@ -62,8 +88,7 @@ curl --request POST \
      --data '
 {
   "transferId": "b09c8d00-8da9-11ec-b909-0242ac120002"
-}
-'
+}'
 ```
 
 ### Response

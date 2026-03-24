@@ -28,13 +28,13 @@ Only data from VASPs affiliated with CodeVASP and certain other supported protoc
 | content-type | string | Required | `application/json` |
 
 ### Body Parameters
-| Name | Type | Required | Description |
-| :--- | :--- | :------- | :---------- |
-| currency | string | Required | The symbol of the virtual asset you wish to transfer. (Case insensitive) |
-| addressNumber | string | Required | Beneficiary's wallet address. Attach secondary addresses like tag or memo after a ':' delimiter. |
-| network | string | Optional | Distinguishes coins on multiple networks. Use `all` to search all available networks. |
-| requestId | string | Required | Unique request ID for querying the result. |
-| callbackUrl | string | Optional | Callback URL in `https://` format to receive the result. |
+| Name | Type | Required | Description                                                                                                                                       |
+| :--- | :--- | :------- |:--------------------------------------------------------------------------------------------------------------------------------------------------|
+| currency | string | Required | The symbol of the virtual asset you wish to transfer. (Case insensitive)                                                                          |
+| addressNumber | string | Required | Beneficiary's wallet address. Attach secondary addresses like tag or memo after a ':' delimiter.                                                  |
+| network | string | Optional | Distinguishes coins on multiple networks. Please refer to [12-Interoperability-with-Other-Protocols]. Use `all` to search all available networks. |
+| requestId | string | Required | Unique request ID for querying the result.                                                                                                        |
+| callbackUrl | string | Optional | Callback URL in `https://` format to receive the result.                                                                                          |
 
 ## Response
 
@@ -64,8 +64,7 @@ curl --request POST \
   "network": "XRP",
   "requestId": "fafd59e2-aff7-4cff-b7d8-9caa0cda70da",
   "callbackUrl": "https://endpoint.com"
-}
-'
+}'
 ```
 
 ### Response

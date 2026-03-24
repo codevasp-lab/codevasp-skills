@@ -30,9 +30,9 @@ For example, when you receive `422 INVALID_RECEIVER_PUBLIC_KEY` error, you can c
 ## Response
 
 ### Fields
-| Name | Type | Description |
-| :--- | :--- | :---------- |
-| pubkeys | array | Array of pubkey objects. |
+| Name | Type | Description                                                                                         |
+| :--- | :--- |:----------------------------------------------------------------------------------------------------|
+| pubkeys | array | An array of pubkey objects registered to VASP. Each object consists of pubkey and ExpiresAt fields. |
 
 **pubkey object fields:**
 

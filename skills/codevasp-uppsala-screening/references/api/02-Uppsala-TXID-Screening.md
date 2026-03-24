@@ -37,6 +37,54 @@ The Uppsala Wallet Screening API does not support development environment. Pleas
 * `securityTags`: List of tags.
 * `detailedDescription`: Description.
 
+**securityTags**: If the requested virtual asset wallet address is "BLACK" or "GRAY," information on the type of criminal damage is provided.
+
+| Category | TAG                         |
+| :------- | :-------------------------- |
+| BLACK    | Adware                      |
+| BLACK    | Black Market                |
+| BLACK    | Child Sexual Exploitation   |
+| BLACK    | Counterfeit Money           |
+| BLACK    | Credit Card Fraud           |
+| BLACK    | Cryptocurrency Laundering   |
+| BLACK    | Cryptojacking               |
+| BLACK    | Double Spend Attack         |
+| BLACK    | Drug                        |
+| BLACK    | Exploits                    |
+| BLACK    | Fake ICO                    |
+| BLACK    | Hack                        |
+| BLACK    | Impersonation               |
+| BLACK    | Information Leakage         |
+| BLACK    | Lazarus                     |
+| BLACK    | Malware                     |
+| BLACK    | Murder                      |
+| BLACK    | Patchwork                   |
+| BLACK    | Phishing                    |
+| BLACK    | Ponzi                       |
+| BLACK    | Ransomware                  |
+| BLACK    | Scam                        |
+| BLACK    | Spam                        |
+| BLACK    | Terrorism                   |
+| BLACK    | Vishing                     |
+| BLACK    | Weapon                      |
+| BLACK    | Spyware                     |
+| BLACK    | TeamTNT                     |
+| BLACK    | Botnet                      |
+| BLACK    | Vulnerability               |
+| GRAY     | Community                   |
+| GRAY     | Covid19                     |
+| GRAY     | Cryptocurrency              |
+| GRAY     | Darknet                     |
+| GRAY     | Escrow                      |
+| GRAY     | Gambling                    |
+| GRAY     | Hosting                     |
+| GRAY     | Locked                      |
+| GRAY     | Pixel Tracker               |
+| GRAY     | Pornography                 |
+| GRAY     | Wiki                        |
+| GRAY     | Domain Generation Algorithm |
+| GRAY     | Non-Compliant VASP (KR)     |
+
 ## Examples
 
 ### Request

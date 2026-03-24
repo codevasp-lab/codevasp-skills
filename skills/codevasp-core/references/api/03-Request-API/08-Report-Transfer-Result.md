@@ -45,6 +45,18 @@ Tx ID or tx hash must always use blockchain **Node Output** data. Adding '0x' in
 | txid | string | Required | Transaction ID generated on the blockchain. |
 | vout | string | Optional | Output index (for UTXO coins). |
 
+**transferId**: This is UUID assigned to the an asset transfer authorization request. It updates the asset transfer result to the corresponding transaction.
+
+***
+
+**txid**: This is a transaction ID generated for virtual asset transfer. This is the information generated on each blockchain.
+
+***
+
+**vout**: For the utxo type coin, multiple txids can be created so that vout is required to distinguish unique txids.
+
+* What is vout? [https://learnmeabitcoin.com/technical/transaction/input/vout/](https://learnmeabitcoin.com/technical/transaction/input/vout/)
+
 ## Response
 
 ### Fields
@@ -53,6 +65,29 @@ Tx ID or tx hash must always use blockchain **Node Output** data. Adding '0x' in
 | transferId | string | The transfer ID. |
 | result | string | Result code (`normal`, `error`). |
 | reasonType | string | Reason code if error (e.g., `TXID_ALREADY_EXISTS`). |
+
+**transferId**: This is an ID to distinguish asset transfer transactions in all APIs
+
+***
+
+**result**: This is the result of receiving originating information.
+
+-`normal`: normal processing
+
+-`error`: If status change is not possible
+
+***
+
+**reasonType**: If the result value is error, a value which identifies the detailed reason.
+
+-`TXID_ALREADY_EXISTS`: You are trying to store a different TXID for an asset transfer that already has a TXID stored. Once a TXID is created, it may fail, but it cannot be changed.
+
+-`TRANSFER_ALREADY_FAILED`: You cannot send a TXID if the blockchain transaction status of corresponding to the TransferId, already failed.
+
+-`UNKNOWN_TRANSFER_ID`: TransferID cannot be found.
+
+-`UNKNOWN`: Unkown error.
+
 
 ## Examples
 
@@ -71,8 +106,7 @@ curl --request POST \
 {
   "transferId": "b09c8d00-8da9-11ec-b909-0242ac120002",
   "txid": "311BFF73D9B7969CCF1042186180159C724FAB59013A7A034A93E5FB9D6BAFE6"
-}
-'
+}'
 ```
 
 ### Response

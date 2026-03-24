@@ -39,6 +39,40 @@ This API retrieves the result of a previous 'Search VASP by Wallet Request'.
 | requestId | string | `requestId` used during the request. |
 | analysisResult | array | Array of search results from individual VASPs. |
 
+**result**: This is the request result.
+
+-`valid`: When the wallet search results are returned successfully.
+
+-`invalid`: When the wallet search result is invalid. The detailed information can be distinguished by the reasonType value.
+
+***
+
+**reasonType**: If the response is invalid, it explains the reason.
+
+-`NOT_FOUND_ADDRESS`: When the virtual asset address cannot be found.
+
+-`LACK_OF_INFORMATION`: When the requestId cannot be found.
+
+-`PROCESSING`: The search has not been completed. Please wait and then request again. More than 10 seconds intervals are recommended.
+
+-`ALLIANCE_DATA_NON_UNIQUE_RESULT`: Received 'valid' responses from two or more VASPs.
+
+***
+
+**reasonMsg**: Defines a detailed message in case of invalidity.
+
+***
+
+**beneficiaryVaspEntityId**: VASP's 'entityId' identified in the search results.
+
+***
+
+**requestId**: 'requestId' used during the request.
+
+***
+
+**analysisResult**: The details of the search results are as follows. The response comes as an array of objects in the form below.
+
 **analysisResult object fields:**
 
 | Name | Type | Description |

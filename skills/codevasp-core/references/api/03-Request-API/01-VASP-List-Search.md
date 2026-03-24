@@ -39,10 +39,43 @@ Returns a list of VASPs that have completed integration with CodeVASP. This refe
 | allianceName | string | The name of the Travel Rule Solution used by the VASP. |
 | pubkeys | array | Array of pubkey objects. |
 
+**health**: Health check result of VASP's API server. If the server is 'up', it is in service; if it is 'down', it is out of service and should not send any requests.
+
+***
+
+**vaspEntityId**: A unique ID assigned to a VASP within the CodeVASP system, ensuring no overlap with other VASPs. This is the same as 'vaspName'.
+
+***
+
+**vaspName**: VASP notation name. It is used as a key to find a specific VASP from the list.\
+(e.g. coinone, bithumb, korbit)
+
+***
+
+**vaspLegalName**: VASP's legal name on registration paper.\
+(e.g. Bithumb Korea Co.,Ltd., Coinone Inc., Korbit Inc.)
+
+***
+
+**countryOfRegistration**: Country code where VASP is registered. This is a two-letter country code determined by ISO-3166-1 alpha-2. Ex) KR, JP, US, etc.
+
+***
+
+**allianceName**: The name of the Travel Rule Solution used by the VASP.
+
+***
+
+**pubkeys**: an array of pubkey objects registered to VASP. Each object consists of pubkey and ExpiresAt fields.
+
+-`pubkey`: base64-encoded public key.
+
+-`expiresAt`: ISO8601 UTC notation of the expiration time of the pubkey.
+
+
 ## Examples
 
 ### Request
-```bash
+```json
 curl --request GET \
      --url https://trapi-dev.codevasp.com/v1/code/vasps \
      --header 'X-Code-Req-Datetime: 2024-03-04T15:10Z' \

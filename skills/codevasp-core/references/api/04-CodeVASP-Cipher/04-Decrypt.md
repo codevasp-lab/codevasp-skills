@@ -44,8 +44,7 @@ curl --request POST \
   "allianceName": "CODE",
   "remotePublicKey": "8DJomhrvr0zD11+m3nwG3ZeO9OsSY8uLHdA7WgoaX0g=",
   "data": "jf6V5hL6VxjYD6+RdMm7NIRKCrFAn4HQ5ZumHgBS7ywcczAB0jK7/hMKHQBFm1RECbKOYGXroA8h+cSvMUABof+dIzqt3intiS9qfXe2bYfq9fdpicrcyhZOHnJT3tOz3HLM1SuxXSFNHrcmrIRE4KL80uV3gRcH7Z6gtbgFhlNDzzL/"
-}
-'
+}'
 ```
 
 ### Response

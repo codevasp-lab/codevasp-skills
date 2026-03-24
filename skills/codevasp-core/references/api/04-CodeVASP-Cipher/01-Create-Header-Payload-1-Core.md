@@ -417,8 +417,7 @@ curl --request POST \
   "apiType": "Types",
   "remotePublicKey": "remotePublicKey",
   "request": "request"
-}
-'
+}'
 ```
 
 ### Response

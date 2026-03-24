@@ -49,6 +49,65 @@ The VASP who sent a request updates the status of saved asset transfer list to v
 | tag | string | Optional | Tag or Memo (for interoperability). |
 | network | string | Optional | Network name (for interoperability). |
 
+**transferId**: A unique ID is required to track the status of transaction from an asset transfer authorization request through subsequent processes.
+The client who sends a request generates and sends a UUID v4 value.
+
+***
+
+**currency**: This is a symbol of the virtual asset you want to transfer. (This is case insensitive.)
+
+***
+
+**amount**: Enter the total number of virtual assets to be transferred, representing the amount actually sent through the blockchain, excluding fees.
+
+***
+
+**historicalCost**: This is an acquisition cost of the virtual asset to be transferred (The requirements of National Tax Service. However, it is not used yet.)
+
+***
+
+**tradePrice**: This is the amount of the virtual asset transfer converted to a type of legal tender. If there is no its own price information, convert this using the price API of other VASP. **Please refer to 'tradePrice' calculation below.**
+
+***
+
+**tradeCurrency**: This is a legal tender code, which follows the ISO 4217 standard used when converting to a legal tender. The following currencies can be entered: 'KRW', 'USD', 'EUR', 'JPY', 'CNY', 'GBP', 'CAD', 'AUD', 'HKD', 'SGD'. If you need to use any other currency code, please inform the CodeVASP team! For more details, please refer to the <Anchor label="Developer FAQ" target="_blank" href="https://alliances.codevasp.com/board/322">Developer FAQ</Anchor> page.
+
+***
+
+**isExceedingThreshold**: Indicates whether the tradePrice exceeds the Travel Rule threshold specified by law.
+This field is input as true or false, and if the field value is true, the Beneficiary name in the request is compared with the actual name of the Beneficiary who owns the virtual asset address.
+If the field value is true and the Beneficiary name is missing or different in the request, a 'denied' response is sent.
+
+***
+
+**originatingVasp**: Due to the difference from other solutions, an originatingVASP object may be included outside payload. In this case, please overwrite originatingVASP of payload -> ivms101.
+
+***
+
+**payload**: This is an object to contain an IVMS101 message. Please refer to [04-IVMS101].
+
+***
+
+**address**: Wallet address of the beneficiary. Since some VASPs integrated with other solutions may required this field, please refer to [12-Interoperability with Other Protocols] page.
+
+***
+
+**tag**: Include this if a Tag or Memo exists (e.g., XRP). Since some VASPs integrated with other solutions may required this field,  please refer to [12-Interoperability with Other Protocols] page.
+
+***
+
+**network**: This is included to distinguish when a single coin exists on multiple networks. Since some VASPs integrated with other solutions may required this field,  please refer to [12-Interoperability with Other Protocols] page.
+
+> 📘 'tradePrice' calculation
+>
+> In the "tradePrice" field, you should enter the value calculated by multiplying the quantity of the asset by its price in fiat currency. In the "tradeCurrency" field, you should specify the type of fiat currency.
+> For example, if you are transferring 2 BTC and the price at that moment is 42,708 USD, then the total price will be 42,708 USD * 2 = 85,416 USD. 
+> In this case, your value should be as follows:
+>
+> "tradePrice": "85416",
+> "tradeCurrency": "USD",
+
+
 ## Response
 
 ### Fields
@@ -60,6 +119,45 @@ The VASP who sent a request updates the status of saved asset transfer list to v
 | transferId | string | The transfer ID. |
 | beneficiaryVasp | string | Beneficiary VASP information. |
 | payload | string | Encrypted ivms101 response message. |
+
+**result**: This is a result of the previous authorization of the virtual asset.
+
+-`verified`: Authorized
+
+-`denied`: Deny to transfer an asset
+
+***
+
+**reasonType**: For denied, the type corresponding to the reason.
+
+-`NOT_FOUND_ADDRESS`: This is a case where a virtual asset address cannot be found.
+
+-`NOT_SUPPORTED_SYMBOL`: This is a currency symbol which cannot be traded.
+
+-`NOT_KYC_USER`: This is a case where the owner did not process KYC verification.
+
+-`INPUT_NAME_MISMATCHED`: The beneficiary name sent in the request message does not match the actual owner's name.
+
+-`DOB_MISMATCHED`: The beneficiary DOB sent in the request message does not match the actual owner's DOB. (Optional)
+
+-`SANCTION_LIST`: Virtual asset addresses or owners are subject to the sanction of the beneficiary VASP.
+
+-`LACK_OF_INFORMATION`: This is a case where there is no the information necessary to make an asset transfer decision.
+
+-`UNKNOWN`: This refers to other reasons.
+
+***
+
+**reasonMsg**: message describing the reasonType
+
+***
+
+**transferId**: A unique ID is required to track the status of a transaction from an asset transfer authorization request through subsequent processes. The client who sends a request generates and sends UUID.
+
+***
+
+**payload**(Required): This is an object to contain IVMS101 message. Please refer to [04-IVMS101].
+
 
 ## Examples
 
@@ -84,29 +182,9 @@ curl --request POST \
   "tradePrice": "125000",
   "tradeCurrency": "USD",
   "isExceedingThreshold": true,
-  "payload": {
-    "ivms101": {
-      "OriginatingVASP": {
-        "originatingVASP": {
-          "legalPerson": {
-            "nationalIdentification": {
-              "nationalIdentifier": "Business registration number",
-              "nationalIdentifierType": "RAID",
-              "registrationAuthority": "RA000657"
-            },
-            "countryOfRegistration": "KR"
-          }
-        }
-      },
-      "Beneficiary": {
-        "accountNumber": [
-          "1KzHK8WMRHRCvRjUV5PFny3v6fqT3UAY5K"
-        ]
-      }
-    }
-  }
-}
-'
+  "originatingVasp": {},
+  "payload": "encrypted ivms101 payload"
+}'
 ```
 
 ### Response
