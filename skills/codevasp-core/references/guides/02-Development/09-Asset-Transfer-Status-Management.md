@@ -47,12 +47,57 @@ graph LR
     class T1,T2,T3,M1,M2,M3 changeable
     class C1 static
 ```
+> **Is it possible for a 'confirmed' status to change to 'canceled'?**
+> - We recommend that VASPs change the status to 'confirmed' ('Report Transfer Result') only after finality has been secured.
+> - However, each VASP has its own criteria for determining finality. For example, Exchange A may consider finality sufficient after three additional blocks are generated, whereas Exchange B may require six blocks for confirmation. Therefore, there is a probabilistic chance that the status may change from 'confirmed' to 'canceled'.
 
+* Monitoring and mapping both Travel Rule information and blockchain networks is required.
+* There is a statistical possibility that a 'confirmed' 'transferId' may still be 'canceled'.
 
-> [!NOTE]Is it possible for a 'confirmed' status to change to 'canceled'?
-> We recommend that VASPs change the status to 'confirmed' ('Report Transfer Result') only after finality has been secured.
-> However, each VASP has its own criteria for determining finality. For example, Exchange A may consider finality sufficient after three additional blocks are generated, whereas Exchange B may require six blocks for confirmation. Therefore, there is a probabilistic chance that the status may change from 'confirmed' to 'canceled'.
+## 4. Originating VASP View
+```mermaid
+graph LR
+%% Node Definitions
+wait["wait"]
+denied(["denied"])
+verified["verified"]
+pending["pending"]
+processing["processing"]
+wait-confirmed["wait-confirmed"]
+confirmed["confirmed"]
+canceled(["canceled"])
 
+    %% Style Classes
+    classDef changeable fill:#f2f2f2,stroke:#d9d9d9,stroke-width:1px,color:#000;
+    classDef unchangeable fill:#ead1d1,stroke:#d1b0b0,stroke-width:1px,color:#000;
+
+    %% Assigning Classes
+    class wait,verified,pending,processing,wait-confirmed,confirmed changeable;
+    class denied,canceled unchangeable;
+
+    %% Primary Transitions
+    wait --> denied
+    wait --> verified
+    verified --> pending
+    pending --> processing
+    processing --> wait-confirmed
+    wait-confirmed --> confirmed
+
+    %% Cancellation Transitions
+    verified --> canceled
+    pending --> canceled
+    processing --> canceled
+    
+    %% Low Probability Transitions (Dashed lines)
+    wait-confirmed -.-> canceled
+    confirmed -.-> canceled
+
+    %% Explanatory Legend (Internal Comments)
+    %% - Solid arrows: Standard transitions.
+    %% - Dashed arrows (-.->): Probability is low but possibility exists (rare case).
+    %% - Grey Nodes: Status value can be changed (can be changed).
+    %% - Red Nodes: Status value cannot be changed (canot be changed).
+```
 * verified / denied: Determined based on the response from the counterparty VASP to the 'Asset Transfer Authorization' request..
 * Sending the 'Asset Transfer Result'(txid) is recommended only after blockchain finality has been secured.
 * There is a probabilistic chance that a 'confirmed' transferId may also be canceled.
