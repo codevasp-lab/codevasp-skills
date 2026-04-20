@@ -32,6 +32,8 @@ For Addon service API requests, the data to be entered in the Header and Body is
 * [`SCREENING`](#screening): Screening
 * [`UNHOSTED_WALLET_VERIFICATION`](#issue-unhosted-wallet-token): Issue Unhosted Wallet Token
 * [`UNHOSTED_WALLET_DATA`](#get-unhosted-wallet-verification-data): Get Unhosted Wallet verification data
+* [`UPPSALA_KYT_SEARCH`](#uppsala-kyt-search): Uppsala KYT Search
+* [`UPPSALA_KYT_REPORT`](#uppsala-kyt-report): Uppsala KYT Search Report
 
 ---
 
@@ -384,6 +386,85 @@ For Addon service API requests, the data to be entered in the Header and Body is
     "signature": "JPtkm4oFhPEUz7yMXqDvNI1E0/PjXxgnQvflFhdV42otuppMPlUbneuWV4qcMr3Ib/uoATTIqJOUrl2oDqT/Bw==",
     "nonce": 53726960,
     "dateTime": "2026-01-29T06:29:08Z",
+    "publicKey": "ILIszcJToqIA7DxHWMHLd5bhUx0QUV7m3KzWRX5sJ34="
+}
+```
+
+## Uppsala KYT Search
+
+### Request
+
+| Name | Required | Type | Description |
+| :--- | :------- | :--- | :---------- |
+| allianceName | Required | string | Only `CODE` is allowed |
+| apiType | Required | string | `UPPSALA_KYT_SEARCH` |
+| request | Required | object | Request Body |
+
+```json
+{
+    "allianceName": "CODE",
+    "apiType": "UPPSALA_KYT_SEARCH",
+    "request": {
+        "txHash": "6db6a29832732e9c6f19ea8f85150ffe1deafa8412654b0be4f4a532a876fff6",
+        "blockchain": "BTC",
+        "force": false,
+        "callbackUrl": "(Optional) https://example.com/callback/kyt/uppsala"
+    }
+}
+```
+
+### Response
+
+| Name | Required | Type | Description |
+| :--- | :------- | :--- | :---------- |
+| signature | Required | string | Generated Signature |
+| nonce | Required | number | Generated Nonce |
+| dateTime | Required | string | Current datetime for request |
+| publicKey | Required | string | Your Public Key |
+| body | Required | string | Generated payload |
+
+> `callbackUrl` is omitted from `body` when not provided.
+
+```json
+{
+    "signature": "rjhM+wJ2kzanjpTi7BAM5Lv7TsbYe+Qs+eTirbulbUNNvKWMPj76Lhpdutq8AP/wKItMKgT4jHh94x/S3YeLBA==",
+    "nonce": 1694362784,
+    "dateTime": "2026-04-20T07:33:25Z",
     "publicKey": "ILIszcJToqIA7DxHWMHLd5bhUx0QUV7m3KzWRX5sJ34=",
+    "body": "{\"txHash\":\"6db6a29832732e9c6f19ea8f85150ffe1deafa8412654b0be4f4a532a876fff6\",\"blockchain\":\"BTC\",\"force\":false}"
+}
+```
+
+## Uppsala KYT Report
+
+### Request
+
+| Name | Required | Type | Description |
+| :--- | :------- | :--- | :---------- |
+| allianceName | Required | string | Only `CODE` is allowed |
+| apiType | Required | string | `UPPSALA_KYT_REPORT` |
+
+```json
+{
+    "allianceName": "CODE",
+    "apiType": "UPPSALA_KYT_REPORT"
+}
+```
+
+### Response
+
+| Name | Required | Type | Description |
+| :--- | :------- | :--- | :---------- |
+| signature | Required | string | Generated Signature |
+| nonce | Required | number | Generated Nonce |
+| dateTime | Required | string | Current datetime for request |
+| publicKey | Required | string | Your Public Key |
+
+```json
+{
+    "signature": "JPtkm4oFhPEUz7yMXqDvNI1E0/PjXxgnQvflFhdV42otuppMPlUbneuWV4qcMr3Ib/uoATTIqJOUrl2oDqT/Bw==",
+    "nonce": 53726960,
+    "dateTime": "2026-04-20T06:29:08Z",
+    "publicKey": "ILIszcJToqIA7DxHWMHLd5bhUx0QUV7m3KzWRX5sJ34="
 }
 ```
