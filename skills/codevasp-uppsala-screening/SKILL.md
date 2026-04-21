@@ -1,10 +1,10 @@
 ---
 name: codevasp-uppsala-screening-guide
-description: Expert guidance on CodeVASP Uppsala Screening API integration. Use for wallet address risk detection and transaction ID (TXID) risk screening via Uppsala Security.
+description: Expert guidance on CodeVASP Uppsala Screening API integration. Use for wallet address risk detection and KYT (Know Your Transaction) analysis via Uppsala Security.
 metadata: 
-  tags: ["codevasp", "uppsala", "screening", "compliance", "AML"]
+  tags: ["codevasp", "uppsala", "screening", "compliance", "AML", "KYT"]
   author: "CodeVASP"
-  version: "1.0.0"
+  version: "2.0.0"
   
 ---
 
@@ -12,9 +12,12 @@ metadata:
 
 ## Overview
 
-This skill provides the AI agent with the necessary procedures, references, and validation instructions to assist developers integrating with the CodeVASP Uppsala Screening APIs. These APIs, jointly operated by CodeVASP and Uppsala Security, detect risks associated with **wallet addresses** and **transaction IDs (TXIDs)**, returning risk levels (`BLACK`, `GRAY`, `WHITE`, `UNKNOWN`) and security tags for flagged items.
+This skill provides the AI agent with the necessary procedures, references, and validation instructions to assist developers integrating with the CodeVASP Uppsala Screening APIs. These APIs, jointly operated by CodeVASP and Uppsala Security, detect risks associated with **wallet addresses** and **blockchain transactions (KYT)**.
 
-> **Important**: The Uppsala Screening APIs do **not** support the development environment. Only the production environment is available.
+- **Wallet Screening**: Synchronous API returning risk levels (`BLACK`, `GRAY`, `WHITE`, `UNKNOWN`) and security tags.
+- **KYT (Know Your Transaction)**: Asynchronous API returning a detailed analysis report with a verdict of `Clean`, `Suspicious`, or `Malicious`.
+
+> **Important**: The Wallet Screening API does **not** support the development environment. The KYT API supports both development and production environments.
 
 ## Folder Architecture & Resource Map
 
@@ -22,7 +25,11 @@ Before responding to user queries, consult the appropriate resources in the `ref
 
 ### 1. API Reference (`references/api/`)
 - `01-Uppsala-Wallet-Screening.md`: API for screening a wallet address for risk. Returns `securityCategory` and `securityTags`.
-- `02-Uppsala-TXID-Screening.md`: API for screening a blockchain transaction ID for risk. Returns sender/receiver wallet risk info with `securityCategory`, `securityTags`, and `detailedDescription`.
+- `02-Uppsala-KYT-Introduction.md`: Overview of the KYT integration workflow, prerequisites, headers, host URLs, and callback IP whitelist.
+- `03-Uppsala-KYT-Development-Environment.md`: Supported networks, preset test cases, and response behaviors for the KYT dev environment.
+- `04-Uppsala-KYT-Search.md`: API for submitting a KYT analysis request (`POST /v1/code/uppsala/kytsearch`). Returns `requestId` and initial `status`.
+- `05-Uppsala-KYT-Report.md`: API for polling the KYT analysis result (`GET /v1/code/uppsala/kytreport`). Returns full report with `verdict`, `riskIndicators`, `annotations`, and `byToken`.
+- `06-Uppsala-KYT-Callback.md`: Callback specification delivered to `callbackUrl` when KYT analysis completes.
 
 ---
 
@@ -31,36 +38,66 @@ Before responding to user queries, consult the appropriate resources in the `ref
 When the user requests assistance with CodeVASP Uppsala Screening integrations, adhere rigorously to the following workflows:
 
 ### Workflow 1: Answering FAQ & Conceptual Questions
-1. Always start by scanning `references/api/01-Uppsala-Wallet-Screening.md` and `02-Uppsala-TXID-Screening.md` to find authoritative answers.
-2. If the user asks about risk levels, explain the four security categories: `BLACK` (highly suspicious), `GRAY` (suspicious), `WHITE` (normal), `UNKNOWN` (unknown).
-3. If the user asks about supported chains, refer to the chain list: BTC, ETH, SOL, LTC, TRX, EOS, XLM, ADA, BNB, BCH, XRP, BSC, KLAY, DASH, DOGE, ZEC, FTM, MATIC, AVAX.
-4. If the user asks about environment availability, clarify that Uppsala Screening APIs are **production only** — no dev environment is supported.
-5. For access requests or inquiries, direct the user to [partnership@codevasp.com](mailto:partnership@codevasp.com).
-6. Keep answers concise. Point the developer to the relevant API reference file instead of explaining extensively.
+1. Always start by scanning the relevant reference file(s) to find authoritative answers.
+2. **Wallet Screening risk levels**: Explain the four security categories — `BLACK` (highly suspicious), `GRAY` (suspicious), `WHITE` (normal), `UNKNOWN` (unknown).
+3. **KYT verdicts**: Explain the three verdicts — `Malicious` (blacklisted addresses found), `Suspicious` (suspicious patterns detected), `Clean` (no risk indicators).
+4. **Environment availability**:
+   - Wallet Screening: **production only** — no dev environment supported.
+   - KYT: both **development** (`https://trapi-dev.codevasp.com`) and **production** (`https://trapi.codevasp.com`) are supported.
+5. **KYT flow**: KYT Search returns a `requestId` immediately. Poll KYT Report until status is `RELEASED` or `FAILED`, or receive the result via callback if `callbackUrl` was provided.
+6. For access requests or inquiries, direct the user to [partnership@codevasp.com](mailto:partnership@codevasp.com).
+7. Keep answers concise. Point the developer to the relevant API reference file instead of explaining extensively.
 
 ### Workflow 2: Implementing Uppsala Screening
-If a developer asks how to implement wallet or TXID screening:
-This skill supports VASP developers working on existing projects. The AI agent must maintain consistency with the existing codebase. Guide the developer through the following steps:
+This skill supports VASP developers working on existing projects. The AI agent must maintain consistency with the existing codebase.
 
-1. **Prerequisites & Setup**:
-   - Use the **production** host URL only: `https://trapi.codevasp.com`.
-   - Configure mandatory headers: `X-Code-Req-PubKey`, `X-Code-Req-Signature`, `X-Code-Req-Datetime`, `X-Code-Req-Nonce`, `X-Request-Origin`.
+#### 2a. Wallet Screening (Ref: `01-Uppsala-Wallet-Screening.md`)
+1. Use the **production** host URL only: `https://trapi.codevasp.com`.
+2. Configure mandatory headers: `X-Code-Req-PubKey`, `X-Code-Req-Signature`, `X-Code-Req-Datetime`, `X-Code-Req-Nonce`, `X-Request-Origin`.
+3. Call `POST /v1/code/upset/wallet` with body: `walletAddress` (string, required) and `chain` (string, required — e.g., `"ETH"`).
+4. Parse the response: check `result` (`NORMAL` or `ERROR`), read `securityCategory` for risk level, inspect `securityTags` for threat labels.
 
-2. **Wallet Screening** (Ref: `01-Uppsala-Wallet-Screening.md`):
-   - Call `POST /v1/code/uppsala/wallet` with body parameters: `walletAddress` (string, required) and `chain` (string, required — e.g., `"ETH"`).
-   - Parse the response: check `result` (`NORMAL` or `ERROR`), read `securityCategory` for risk level, and inspect `securityTags` array for specific threat labels (e.g., "Gambling", "Malware", "Darknet").
+#### 2b. KYT (Know Your Transaction) (Ref: `02-Uppsala-KYT-Introduction.md`, `04-Uppsala-KYT-Search.md`, `05-Uppsala-KYT-Report.md`, `06-Uppsala-KYT-Callback.md`)
+Guide the developer through the following three-step flow:
 
-3. **TXID Screening** (Ref: `02-Uppsala-TXID-Screening.md`):
-   - Call `POST /v1/code/uppsala/tx-hash` with body parameters: `txid` (string, required) and `chain` (string, required — e.g., `"ETH"`).
-   - Parse the response: check `result`, then iterate over `senderWallets` and `receiverWallets` arrays. Each wallet object contains `walletAddress`, `securityCategory`, `securityTags`, and `detailedDescription`.
+1. **Submit KYT Search** (Ref: `04-Uppsala-KYT-Search.md`):
+   - Call `POST /v1/code/uppsala/kytsearch` with body: `txHash` (string, required), `blockchain` (string, required), `force` (boolean, optional, default `false`), `callbackUrl` (string, optional HTTPS URL).
+   - The `txHash` must be a **confirmed** transaction. The `blockchain` must match the actual chain of the transaction.
+   - Response: `requestId` (integer) and `status` (`PENDING` or `RELEASED`).
+   - If `RELEASED`, a cached result was found — proceed directly to KYT Report to fetch the full report.
+
+2. **Poll KYT Report** (Ref: `05-Uppsala-KYT-Report.md`):
+   - Call `GET /v1/code/uppsala/kytreport?requestId={requestId}` at 5–10 second intervals.
+   - Status values: `PENDING` (still processing), `RELEASED` (complete — `report` field populated), `FAILED` (failed — `error` field populated).
+   - Parse the `report`: check `verdict` (`Clean`, `Suspicious`, `Malicious`), inspect `riskIndicators` for `blacklistedAddresses`, `suspiciousServices`, `behavioralPatterns`, `transactionPatterns`, and `mlFeatures`.
+
+3. **Receive Callback (optional)** (Ref: `06-Uppsala-KYT-Callback.md`):
+   - If `callbackUrl` was provided, the result is delivered via `POST` once the status becomes `RELEASED` or `FAILED`. The body matches the KYT Report response format.
+   - Callbacks are sent **once only** — no retries. Keep KYT Report polling as a fallback.
+   - Whitelist CodeVASP server IPs: Dev — `3.35.100.55/32`, `13.209.222.19/32`, `211.245.36.156/32`; Prod — `3.37.135.89/32`.
 
 ### Workflow 3: Request Payload Validation
-If the user provides a request payload to validate for either screening API:
-1. **Field Check**: Verify all required fields are present:
-   - Wallet Screening: `walletAddress`, `chain` (per `01-Uppsala-Wallet-Screening.md`).
-   - TXID Screening: `txid`, `chain` (per `02-Uppsala-TXID-Screening.md`).
-2. **Chain Check**: Confirm the `chain` value matches one of the supported chains: BTC, ETH, SOL, LTC, TRX, EOS, XLM, ADA, BNB, BCH, XRP, BSC, KLAY, DASH, DOGE, ZEC, FTM, MATIC, AVAX.
-3. **Provide Feedback**: Identify errors with line-item precision, including missing required fields or unsupported chain values.
+If the user provides a request payload to validate:
+
+#### Wallet Screening
+1. Verify required fields: `walletAddress`, `chain`.
+2. Confirm `chain` is one of the supported values: BTC, ETH, SOL, LTC, TRX, EOS, XLM, ADA, BNB, BCH, XRP, BSC, KLAY, DASH, DOGE, ZEC, FTM, MATIC, AVAX.
+
+#### KYT Search
+1. Verify required fields: `txHash`, `blockchain`.
+2. Confirm `blockchain` is one of the supported network codes (refer to `04-Uppsala-KYT-Search.md` for the full list including ETH, BTC, TRX, SOL, MATIC, BSC, etc.).
+3. If `callbackUrl` is present, confirm it is a valid HTTPS URL.
+4. Provide feedback with line-item precision on any missing required fields, unsupported blockchain values, or invalid URLs.
+
+### Workflow 4: KYT Development Environment Testing (Ref: `03-Uppsala-KYT-Development-Environment.md`)
+If the user asks about testing KYT in the development environment:
+1. Dev host: `https://trapi-dev.codevasp.com`. Only ETH and BTC are supported.
+2. Use the preset test cases to trigger specific outcomes:
+   - **Clean**: `blockchain: "ETH"`, `txHash: "0x5028a06f62bd79cd44d96779c5d1db68882ede90c3cbf62b6cc11a6218984063"`
+   - **Suspicious**: `blockchain: "BTC"`, `txHash: "6db6a29832732e9c6f19ea8f85150ffe1deafa8412654b0be4f4a532a876fff6"`
+   - **Malicious**: `blockchain: "ETH"`, `txHash: "0x091d6e123c64e8ce9c0f39a9085d6adcf29cf8f49c888a95c128566550765298"`
+3. Any other pair returns `FAILED` with `"Tx hash not found"`.
+4. `requestId` is valid for 5 minutes in the dev environment.
 
 ## Compliance Constraints
 - **Do not invent instructions.** If something is not covered in the `references/` directories, inform the user that you cannot verify that specific detail and they should check the official CodeVASP Alliance documentation.

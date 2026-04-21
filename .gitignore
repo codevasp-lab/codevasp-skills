@@ -68,3 +68,5 @@ pip-log.txt
 target/
 .gradle/
 build/
+
+.junie
