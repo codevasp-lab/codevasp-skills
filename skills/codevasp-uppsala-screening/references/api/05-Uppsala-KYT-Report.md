@@ -91,7 +91,7 @@ When `status` is `RELEASED`, the `report` field contains the full analysis resul
 | suspiciousServices | map<address, label> | High-risk services in the trace path. |
 | behavioralPatterns | object | Behavioral pattern detections. |
 | transactionPatterns | object | Transaction pattern detections. |
-| mlFeatures | map<string, integer> | ML model laundering detections. Value is `1` (detected). |
+| mlFeatures | `map<string, integer>` | ML model laundering detections. Value is `1` (detected). |
 
 #### `blacklistedAddresses` (string[])
 
@@ -193,7 +193,7 @@ Transactions with abnormally high gas fees relative to the transfer amount.
 | transactions[].exceeds_ratio_threshold | boolean | Whether gas cost exceeds the ratio threshold. |
 | transactions[].threshold_used | number | Absolute threshold applied. |
 
-#### `mlFeatures` (map<string, integer>)
+#### `mlFeatures` (`map<string, integer>`)
 
 FATF guideline-based ML model detections for money laundering behaviors. Non-empty values contribute to `Suspicious` or `Malicious` verdicts.
 
