@@ -96,7 +96,7 @@ curl --request GET \
 ```json
 {
   "result": "valid",
-  "beneficiaryVaspEntityId": "example-vasp",
+  "vaspEntityId": "example-vasp",
   "requestId": "fafd59e2-aff7-4cff-b7d8-9caa0cda70da",
   "analysisResult": [
     {
