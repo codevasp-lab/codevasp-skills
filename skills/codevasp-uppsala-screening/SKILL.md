@@ -19,86 +19,77 @@ This skill provides the AI agent with the necessary procedures, references, and 
 
 > **Important**: The Wallet Screening API does **not** support the development environment. The KYT API supports both development and production environments.
 
-## Folder Architecture & Resource Map
+## Documentation Source
 
-Before responding to user queries, consult the appropriate resources in the `references/` directory. Be explicit in your responses about which file or standard you are referencing.
+API references are **not bundled** with this skill. They live at [docs.codevasp.com](https://docs.codevasp.com), which is the single source of truth. Fetch only the page(s) needed for the current question.
 
-### 1. API Reference (`references/api/`)
-- `01-Uppsala-Wallet-Screening.md`: API for screening a wallet address for risk. Returns `securityCategory` and `securityTags`.
-- `02-Uppsala-KYT-Introduction.md`: Overview of the KYT integration workflow, prerequisites, headers, host URLs, and callback IP whitelist.
-- `03-Uppsala-KYT-Development-Environment.md`: Supported networks, preset test cases, and response behaviors for the KYT dev environment.
-- `04-Uppsala-KYT-Search.md`: API for submitting a KYT analysis request (`POST /v1/code/uppsala/kytsearch`). Returns `requestId` and initial `status`.
-- `05-Uppsala-KYT-Report.md`: API for polling the KYT analysis result (`GET /v1/code/uppsala/kytreport`). Returns full report with `verdict`, `riskIndicators`, `annotations`, and `byToken`.
-- `06-Uppsala-KYT-Callback.md`: Callback specification delivered to `callbackUrl` when KYT analysis completes.
+- **How to fetch**: Prefer `curl -s <url>` so you get the raw Markdown verbatim. If only a web-fetch tool is available, ask it to return the page content verbatim, not a summary — field names, required flags, and enum values must be exact.
+- **Page not listed below?** Fetch `https://docs.codevasp.com/llms.txt` (index of every page) and use the entries under `## English` → `Uppsala Screening`.
+- **Fetch failed** (no network, blocked, 404): tell the user you could not load the official documentation and name the page you tried. Do not answer from memory as if it were verified.
+
+## Resource Map
+
+Be explicit in your responses about which page you are referencing.
+
+### 1. API Reference (remote)
+- [`01-Uppsala-Wallet-Screening`](https://docs.codevasp.com/api/markdown/en/uppsala-screening/api-reference/01-Uppsala-Wallet-Screening): API for screening a wallet address for risk. Returns `securityCategory` and `securityTags`.
+- [`02-Uppsala-KYT-Introduction`](https://docs.codevasp.com/api/markdown/en/uppsala-screening/api-reference/02-Uppsala-KYT-Introduction): Overview of the KYT integration workflow, prerequisites, headers, host URLs, and callback IP whitelist.
+- [`03-Uppsala-KYT-Development-Environment`](https://docs.codevasp.com/api/markdown/en/uppsala-screening/api-reference/03-Uppsala-KYT-Development-Environment): Supported networks, preset test cases, and response behaviors for the KYT dev environment.
+- [`04-Uppsala-KYT-Search`](https://docs.codevasp.com/api/markdown/en/uppsala-screening/api-reference/04-Uppsala-KYT-Search): API for submitting a KYT analysis request. Returns `requestId` and initial `status`.
+- [`05-Uppsala-KYT-Report`](https://docs.codevasp.com/api/markdown/en/uppsala-screening/api-reference/05-Uppsala-KYT-Report): API for polling the KYT analysis result. Returns full report with `verdict`, `riskIndicators`, `annotations`, and `byToken`.
+- [`06-Uppsala-KYT-Callback`](https://docs.codevasp.com/api/markdown/en/uppsala-screening/api-reference/06-Uppsala-KYT-Callback): Callback specification delivered to `callbackUrl` when KYT analysis completes.
 
 ---
 
 ## Instructions
 
-When the user requests assistance with CodeVASP Uppsala Screening integrations, adhere rigorously to the following workflows:
+When the user requests assistance with CodeVASP Uppsala Screening integrations, adhere rigorously to the following workflows. Concrete values — host URLs, endpoint paths, field lists, supported chains, IP addresses, test data — are defined only in the documentation pages above. Always fetch the referenced page and quote values from it; do not rely on values remembered from earlier conversations.
 
 ### Workflow 1: Answering FAQ & Conceptual Questions
-1. Always start by scanning the relevant reference file(s) to find authoritative answers.
-2. **Wallet Screening risk levels**: Explain the four security categories — `BLACK` (highly suspicious), `GRAY` (suspicious), `WHITE` (normal), `UNKNOWN` (unknown).
-3. **KYT verdicts**: Explain the three verdicts — `Malicious` (blacklisted addresses found), `Suspicious` (suspicious patterns detected), `Clean` (no risk indicators).
-4. **Environment availability**:
-   - Wallet Screening: **production only** — no dev environment supported.
-   - KYT: both **development** (`https://trapi-dev.codevasp.com`) and **production** (`https://trapi.codevasp.com`) are supported.
-5. **KYT flow**: KYT Search returns a `requestId` immediately. Poll KYT Report until status is `RELEASED` or `FAILED`, or receive the result via callback if `callbackUrl` was provided.
+1. Always start by fetching the relevant page(s) to find authoritative answers.
+2. **Wallet Screening risk levels** (Ref: `01-Uppsala-Wallet-Screening`): Explain the security categories and security tags as defined on the page.
+3. **KYT verdicts** (Ref: `05-Uppsala-KYT-Report`): Explain the verdict values and risk indicators as defined on the page.
+4. **Environment availability**: Wallet Screening and KYT differ in which environments they support. Check `01-Uppsala-Wallet-Screening` and `02-Uppsala-KYT-Introduction` for the supported environments and host URLs.
+5. **KYT flow**: KYT is asynchronous — a search request returns a `requestId`, and the result is obtained by polling KYT Report or via an optional callback. See `02-Uppsala-KYT-Introduction` for the overview.
 6. For access requests or inquiries, direct the user to [partnership@codevasp.com](mailto:partnership@codevasp.com).
-7. Keep answers concise. Point the developer to the relevant API reference file instead of explaining extensively.
+7. Keep answers concise. Point the developer to the relevant API reference page instead of explaining extensively.
 
 ### Workflow 2: Implementing Uppsala Screening
 This skill supports VASP developers working on existing projects. The AI agent must maintain consistency with the existing codebase.
 
-#### 2a. Wallet Screening (Ref: `01-Uppsala-Wallet-Screening.md`)
-1. Use the **production** host URL only: `https://trapi.codevasp.com`.
-2. Configure mandatory headers: `X-Code-Req-PubKey`, `X-Code-Req-Signature`, `X-Code-Req-Datetime`, `X-Code-Req-Nonce`, `X-Request-Origin`.
-3. Call `POST /v1/code/upset/wallet` with body: `walletAddress` (string, required) and `chain` (string, required — e.g., `"ETH"`).
-4. Parse the response: check `result` (`NORMAL` or `ERROR`), read `securityCategory` for risk level, inspect `securityTags` for threat labels.
+#### 2a. Wallet Screening (Ref: `01-Uppsala-Wallet-Screening`)
+1. Take the host URL, endpoint, mandatory headers, and request body fields from the page. Note the page's environment restriction before suggesting a host.
+2. Parse the response as described on the page: the result code, the security category (risk level), and the security tags.
 
-#### 2b. KYT (Know Your Transaction) (Ref: `02-Uppsala-KYT-Introduction.md`, `04-Uppsala-KYT-Search.md`, `05-Uppsala-KYT-Report.md`, `06-Uppsala-KYT-Callback.md`)
+#### 2b. KYT (Know Your Transaction) (Ref: `02-Uppsala-KYT-Introduction`, `04-Uppsala-KYT-Search`, `05-Uppsala-KYT-Report`, `06-Uppsala-KYT-Callback`)
 Guide the developer through the following three-step flow:
 
-1. **Submit KYT Search** (Ref: `04-Uppsala-KYT-Search.md`):
-   - Call `POST /v1/code/uppsala/kytsearch` with body: `txHash` (string, required), `blockchain` (string, required), `force` (boolean, optional, default `false`), `callbackUrl` (string, optional HTTPS URL).
-   - The `txHash` must be a **confirmed** transaction. The `blockchain` must match the actual chain of the transaction.
-   - Response: `requestId` (integer) and `status` (`PENDING` or `RELEASED`).
-   - If `RELEASED`, a cached result was found — proceed directly to KYT Report to fetch the full report.
+1. **Submit KYT Search** (Ref: `04-Uppsala-KYT-Search`):
+   - Build the request from the page's body parameters, including its requirements on the transaction (e.g. confirmation state, matching chain).
+   - Handle both initial statuses the page describes — including the case where a cached result is returned immediately and the report can be fetched right away.
 
-2. **Poll KYT Report** (Ref: `05-Uppsala-KYT-Report.md`):
-   - Call `GET /v1/code/uppsala/kytreport?requestId={requestId}` at 5–10 second intervals.
-   - Status values: `PENDING` (still processing), `RELEASED` (complete — `report` field populated), `FAILED` (failed — `error` field populated).
-   - Parse the `report`: check `verdict` (`Clean`, `Suspicious`, `Malicious`), inspect `riskIndicators` for `blacklistedAddresses`, `suspiciousServices`, `behavioralPatterns`, `transactionPatterns`, and `mlFeatures`.
+2. **Poll KYT Report** (Ref: `05-Uppsala-KYT-Report`):
+   - Poll with the `requestId` at the interval the page recommends until a terminal status is reached.
+   - Parse the report fields (verdict, risk indicators, etc.) as defined on the page.
 
-3. **Receive Callback (optional)** (Ref: `06-Uppsala-KYT-Callback.md`):
-   - If `callbackUrl` was provided, the result is delivered via `POST` once the status becomes `RELEASED` or `FAILED`. The body matches the KYT Report response format.
-   - Callbacks are sent **once only** — no retries. Keep KYT Report polling as a fallback.
-   - Whitelist CodeVASP server IPs: Dev — `3.35.100.55/32`, `13.209.222.19/32`, `211.245.36.156/32`; Prod — `3.37.135.89/32`.
+3. **Receive Callback (optional)** (Ref: `06-Uppsala-KYT-Callback`, `02-Uppsala-KYT-Introduction`):
+   - Implement the callback receiver per the page's payload format.
+   - Follow the page's delivery/retry behavior; if callbacks are not retried, keep KYT Report polling as a fallback.
+   - Take the CodeVASP server IP addresses to whitelist from `02-Uppsala-KYT-Introduction`.
 
 ### Workflow 3: Request Payload Validation
 If the user provides a request payload to validate:
+1. Fetch the page for the API being called (`01-Uppsala-Wallet-Screening` or `04-Uppsala-KYT-Search`).
+2. Verify all required fields are present and correctly typed.
+3. Confirm the chain / blockchain value is in the supported list on that page (for KYT in the dev environment, also check `03-Uppsala-KYT-Development-Environment`).
+4. Validate any URL fields (e.g. `callbackUrl`) against the page's requirements.
+5. Provide feedback with line-item precision on missing fields, unsupported values, or invalid URLs.
 
-#### Wallet Screening
-1. Verify required fields: `walletAddress`, `chain`.
-2. Confirm `chain` is one of the supported values: BTC, ETH, SOL, LTC, TRX, EOS, XLM, ADA, BNB, BCH, XRP, BSC, KLAY, DASH, DOGE, ZEC, FTM, MATIC, AVAX.
-
-#### KYT Search
-1. Verify required fields: `txHash`, `blockchain`.
-2. Confirm `blockchain` is one of the supported network codes (refer to `04-Uppsala-KYT-Search.md` for the full list including ETH, BTC, TRX, SOL, MATIC, BSC, etc.).
-3. If `callbackUrl` is present, confirm it is a valid HTTPS URL.
-4. Provide feedback with line-item precision on any missing required fields, unsupported blockchain values, or invalid URLs.
-
-### Workflow 4: KYT Development Environment Testing (Ref: `03-Uppsala-KYT-Development-Environment.md`)
+### Workflow 4: KYT Development Environment Testing (Ref: `03-Uppsala-KYT-Development-Environment`)
 If the user asks about testing KYT in the development environment:
-1. Dev host: `https://trapi-dev.codevasp.com`. Only ETH and BTC are supported.
-2. Use the preset test cases to trigger specific outcomes:
-   - **Clean**: `blockchain: "ETH"`, `txHash: "0x5028a06f62bd79cd44d96779c5d1db68882ede90c3cbf62b6cc11a6218984063"`
-   - **Suspicious**: `blockchain: "BTC"`, `txHash: "6db6a29832732e9c6f19ea8f85150ffe1deafa8412654b0be4f4a532a876fff6"`
-   - **Malicious**: `blockchain: "ETH"`, `txHash: "0x091d6e123c64e8ce9c0f39a9085d6adcf29cf8f49c888a95c128566550765298"`
-3. Any other pair returns `FAILED` with `"Tx hash not found"`.
-4. `requestId` is valid for 5 minutes in the dev environment.
+1. Fetch the page and use its dev host, supported networks, and preset test cases (`blockchain` + `txHash` pairs) for each verdict.
+2. Explain the page's behavior for inputs that are not preset test cases, and any dev-only limits such as `requestId` validity.
 
 ## Compliance Constraints
-- **Do not invent instructions.** If something is not covered in the `references/` directories, inform the user that you cannot verify that specific detail and they should check the official CodeVASP Alliance documentation.
+- **Do not invent instructions.** If something is not covered in the CodeVASP documentation (docs.codevasp.com), inform the user that you cannot verify that specific detail and they should check the official CodeVASP Alliance documentation.
 - Always refer to the network strictly as **CodeVASP**.
