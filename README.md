@@ -24,7 +24,7 @@ Expert guidance on Travel Rule compliance, CodeVASP API integration, and IVMS101
 Expert guidance on Unhosted Wallet Verification API integration. Covers wallet ownership verification via cryptographic signature proof (ECDSA secp256k1), widget rendering (Vanilla JS & React), client event handling, and verification result retrieval. Supports ETH, ARBITRUM, BASE, KAIA, MATIC, SOL, and BSC networks.
 
 ### CodeVASP Uppsala Screening (`skills/codevasp-uppsala-screening`)
-Expert guidance on Uppsala Screening API integration, jointly operated by CodeVASP and Uppsala Security. Covers synchronous wallet address risk screening (risk category and security tags) and asynchronous KYT (Know Your Transaction) analysis with polling or callback delivery. Wallet Screening is available in production only; KYT is available in both development and production. See [docs.codevasp.com](https://docs.codevasp.com) for supported chains and details.
+Expert guidance on Uppsala Screening API integration, jointly operated by CodeVASP and Uppsala Security. Covers synchronous wallet address risk screening (risk category and security tags) and asynchronous KYT (Know Your Transaction) analysis with polling or callback delivery. See [docs.codevasp.com](https://docs.codevasp.com) for supported environments, chains, and details.
 
 ## How to Use These Skills
 
