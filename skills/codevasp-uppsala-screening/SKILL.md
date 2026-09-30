@@ -17,7 +17,7 @@ This skill provides the AI agent with the necessary procedures, references, and 
 - **Wallet Screening**: Synchronous API returning risk levels (`BLACK`, `GRAY`, `WHITE`, `UNKNOWN`) and security tags.
 - **KYT (Know Your Transaction)**: Asynchronous API returning a detailed analysis report with a verdict of `Clean`, `Suspicious`, or `Malicious`.
 
-> **Important**: The Wallet Screening API does **not** support the development environment. The KYT API supports both development and production environments.
+> **Environments**: Supported environments, host URLs, and development-environment behavior (e.g. mock data, preset test cases) are defined per API in the documentation. Check `01-Uppsala-Wallet-Screening` and `02-Uppsala-KYT-Introduction` before suggesting a host.
 
 ## Documentation Source
 
@@ -58,7 +58,7 @@ When the user requests assistance with CodeVASP Uppsala Screening integrations, 
 This skill supports VASP developers working on existing projects. The AI agent must maintain consistency with the existing codebase.
 
 #### 2a. Wallet Screening (Ref: `01-Uppsala-Wallet-Screening`)
-1. Take the host URL, endpoint, mandatory headers, and request body fields from the page. Note the page's environment restriction before suggesting a host.
+1. Take the host URL, endpoint, mandatory headers, and request body fields from the page. Check which environments the page supports before suggesting a host.
 2. Parse the response as described on the page: the result code, the security category (risk level), and the security tags.
 
 #### 2b. KYT (Know Your Transaction) (Ref: `02-Uppsala-KYT-Introduction`, `04-Uppsala-KYT-Search`, `05-Uppsala-KYT-Report`, `06-Uppsala-KYT-Callback`)
@@ -81,14 +81,15 @@ Guide the developer through the following three-step flow:
 If the user provides a request payload to validate:
 1. Fetch the page for the API being called (`01-Uppsala-Wallet-Screening` or `04-Uppsala-KYT-Search`).
 2. Verify all required fields are present and correctly typed.
-3. Confirm the chain / blockchain value is in the supported list on that page (for KYT in the dev environment, also check `03-Uppsala-KYT-Development-Environment`).
+3. Confirm the chain / blockchain value is in the supported list on that page (for the development environment, also check its test-environment section — for KYT, `03-Uppsala-KYT-Development-Environment`).
 4. Validate any URL fields (e.g. `callbackUrl`) against the page's requirements.
 5. Provide feedback with line-item precision on missing fields, unsupported values, or invalid URLs.
 
-### Workflow 4: KYT Development Environment Testing (Ref: `03-Uppsala-KYT-Development-Environment`)
-If the user asks about testing KYT in the development environment:
-1. Fetch the page and use its dev host, supported networks, and preset test cases (`blockchain` + `txHash` pairs) for each verdict.
-2. Explain the page's behavior for inputs that are not preset test cases, and any dev-only limits such as `requestId` validity.
+### Workflow 4: Development Environment Testing
+If the user asks about testing in the development environment:
+1. **Wallet Screening** (Ref: `01-Uppsala-Wallet-Screening`): Fetch the page and use its test-environment section — dev host, mock-data behavior, and the example requests to send as-is.
+2. **KYT** (Ref: `03-Uppsala-KYT-Development-Environment`): Fetch the page and use its dev host, supported networks, and preset test cases (`blockchain` + `txHash` pairs) for each verdict.
+3. Explain the page's behavior for inputs that are not preset test data, and any dev-only limits (e.g. `requestId` validity for KYT).
 
 ## Compliance Constraints
 - **Do not invent instructions.** If something is not covered in the CodeVASP documentation (docs.codevasp.com), inform the user that you cannot verify that specific detail and they should check the official CodeVASP Alliance documentation.
