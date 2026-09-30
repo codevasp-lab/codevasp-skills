@@ -21,7 +21,7 @@ Once loaded, you can ask your AI assistant to:
 Expert guidance on Travel Rule compliance, CodeVASP API integration, and IVMS101 data structures. Covers VASP discovery, transfer authorization, encryption/decryption, and corporate Travel Rule flows. Includes code samples in Node.js, Python, Java, and Go.
 
 ### CodeVASP Unhosted Wallet (`skills/codevasp-unhosted-wallet`)
-Expert guidance on Unhosted Wallet Verification API integration. Covers wallet ownership verification via cryptographic signature proof (ECDSA secp256k1), widget rendering (Vanilla JS & React), client event handling, and verification result retrieval. Supports ETH, ARBITRUM, BASE, KAIA, MATIC, SOL, and BSC networks.
+Expert guidance on Unhosted Wallet Verification API integration. Covers wallet ownership verification via cryptographic signature proof (ECDSA secp256k1), widget rendering (Vanilla JS & React), client event handling, and verification result retrieval. See [docs.codevasp.com](https://docs.codevasp.com) for supported networks and details.
 
 ### CodeVASP Uppsala Screening (`skills/codevasp-uppsala-screening`)
 Expert guidance on Uppsala Screening API integration, jointly operated by CodeVASP and Uppsala Security. Covers synchronous wallet address risk screening (risk category and security tags) and asynchronous KYT (Know Your Transaction) analysis with polling or callback delivery. See [docs.codevasp.com](https://docs.codevasp.com) for supported environments, chains, and details.
