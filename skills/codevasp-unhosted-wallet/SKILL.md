@@ -12,7 +12,7 @@ metadata:
 
 ## Overview
 
-This skill provides the AI agent with the necessary procedures, references, and validation instructions to assist developers integrating with the CodeVASP Unhosted Wallet Verification system. It validates wallet ownership based on a **signature proof** from a user's personal (unhosted) wallet, using ECDSA (secp256k1) and keccak256 hashing to ensure cryptographically secure ownership claims.
+This skill provides the AI agent with the necessary procedures, references, and validation instructions to assist developers integrating with the CodeVASP Unhosted Wallet Verification system. It validates wallet ownership based on a cryptographic **signature proof** from a user's personal (unhosted) wallet. See `01-Unhosted-Wallet-Introduction` for how the proof works.
 
 ## Documentation Source
 
@@ -36,12 +36,12 @@ Be explicit in your responses about which page you are referencing.
 
 ## Instructions
 
-When the user requests assistance with CodeVASP Unhosted Wallet integrations, adhere rigorously to the following workflows:
+When the user requests assistance with CodeVASP Unhosted Wallet integrations, adhere rigorously to the following workflows. Concrete values — host URLs, endpoint paths, headers, field lists, widget script URLs, event names, error codes, token validity, supported networks — are defined only in the documentation pages above. Always fetch the referenced page and quote values from it; do not rely on values remembered from earlier conversations.
 
 ### Workflow 1: Answering FAQ & Conceptual Questions
 1. Always start by fetching `01-Unhosted-Wallet-Introduction` to find authoritative answers about the verification concept, prerequisites, supported networks, and required headers.
 2. If the user asks about the verification flow, explain the three-step process: Token Issuance → Widget Execution → Result Processing.
-3. If the user asks about supported networks, refer to the network list in `01-Unhosted-Wallet-Introduction` (ETH, ARBITRUM, BASE, KAIA, MATIC, SOL, BSC).
+3. If the user asks about supported networks, quote the list from `01-Unhosted-Wallet-Introduction`, including how its values map to request fields.
 4. Keep answers concise. If a topic has an example, point the developer to the relevant API reference page instead of explaining extensively.
 
 ### Workflow 2: Implementing the Unhosted Wallet Verification Flow
@@ -49,32 +49,27 @@ If a developer asks how to implement unhosted wallet verification:
 This skill supports VASP developers working on existing projects. The AI agent must maintain consistency with the existing codebase. Guide the developer through the following steps:
 
 1. **Prerequisites & Setup** (Ref: `01-Unhosted-Wallet-Introduction`):
-   - Ensure the Unhosted Wallet feature is activated by contacting the CodeVASP team.
-   - Set up the appropriate host URL (Dev: `https://trapi-dev.codevasp.com`, Prod: `https://trapi.codevasp.com`).
-   - Configure mandatory headers: `X-Code-Req-PubKey`, `X-Code-Req-Signature`, `X-Code-Req-Datetime`, `X-Code-Req-Nonce`, `X-Request-Origin`.
+   - Confirm the feature activation prerequisite described on the page.
+   - Take the host URLs for each environment and the mandatory headers from the page.
 
 2. **Step 1 — Issue Token** (Ref: `02-Issue-Token`):
-   - Call `POST /v1/code/unhosted-wallet-verification/widget/token` with required body parameters: `blockchain`, `asset`, `address`, `customerIdentification`, `widgetRenderingOrigin`, and optionally `callbackUrl`.
-   - Store the returned `token` (one-time use, valid 24 hours) and `walletVerificationId` (unique session identifier).
+   - Build the request from the page's endpoint and body parameters (required and optional).
+   - Store the returned token and verification session identifier, respecting the token's usage and validity rules on the page.
 
 3. **Step 2 — Render Widget** (Ref: `03-Render-Widget`):
-   - Load the widget script (Dev: `https://wallet-verifier-dev.codevasp.com/widget/wallet-verifier.js`, Prod: `https://wallet-verifier.codevasp.com/widget/wallet-verifier.js`).
-   - Create a `<wallet-verifier>` element with `data-token` and `data-language` attributes.
-   - Identify the user's preferred framework and provide the corresponding example (Vanilla JS or React) from `03-Render-Widget`.
+   - Load the widget script for the target environment and create the widget element with the attributes the page specifies.
+   - Identify the user's preferred framework and provide the corresponding example (Vanilla JS or React) from the page.
 
 4. **Step 3 — Handle Client Events** (Ref: `03-Render-Widget`):
-   - Listen for `verification-complete` event on success — contains `id`, `status`, `flow`, `address`, `asset`, `blockchain`.
-   - Listen for `verification-error` event on failure — contains `errorCode` and `message`.
-   - Handle error codes: `GENERAL_API_ERROR` (recommend refreshing widget or starting new session) and `CRYPTOGRAPHIC_SIGNATURE_FLOW_ERROR` (user cancelled).
+   - Handle the success and error events, their payload fields, and each error code as described on the page, including the recommended recovery for each error.
 
 5. **Step 4 — Get Verification Result** (Ref: `04-Get-Result`):
-   - If a `callbackUrl` was configured, results are delivered automatically upon successful verification.
-   - Alternatively, call `GET /v1/code/unhosted-wallet-verification/{verificationId}` to poll for results.
-   - The response includes: `verificationId`, `status`, `blockchain`, `asset`, `address`, `signature`, `signedMessage`, `verifiedAt`.
+   - Explain both delivery paths: the callback (if configured at token issuance) and the result-retrieval API.
+   - Parse the response fields as defined on the page.
 
 ### Workflow 3: JSON Payload Validation
 If the user provides a request payload to validate for the Issue Token API:
-1. **Field Check**: Verify all required fields are present (`blockchain`, `asset`, `address`, `customerIdentification`, `widgetRenderingOrigin`) against `02-Issue-Token`.
+1. **Field Check**: Fetch `02-Issue-Token` and verify all required fields are present and correctly typed.
 2. **Network Check**: Confirm the `blockchain` value matches one of the supported networks listed in `01-Unhosted-Wallet-Introduction`.
 3. **Provide Feedback**: Identify errors with line-item precision, including missing required fields, invalid network values, or malformed URLs.
 
